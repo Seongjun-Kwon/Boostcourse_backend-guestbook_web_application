@@ -1,5 +1,6 @@
 package boostcourse.backend.guestbook.servlet;
 
+import boostcourse.backend.guestbook.DBConfig;
 import boostcourse.backend.guestbook.dao.GuestbookDao;
 import boostcourse.backend.guestbook.dto.Guestbook;
 
@@ -18,7 +19,8 @@ public class GuestbookWriteServlet extends HttpServlet {
         String name = request.getParameter("name");
         String content = request.getParameter("content");
 
-        GuestbookDao guestbookDao = new GuestbookDao();
+        DBConfig dbConfig = new DBConfig();
+        GuestbookDao guestbookDao = dbConfig.guestbookDao();
         guestbookDao.addGuestbook(new Guestbook(name, content));
 
         response.sendRedirect("/guestbooks");

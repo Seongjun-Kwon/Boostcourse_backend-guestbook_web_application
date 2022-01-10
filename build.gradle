@@ -17,6 +17,7 @@ dependencies {
 	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
 	implementation 'javax.servlet:jstl'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.apache.commons:commons-dbcp2:2.9.0'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	runtimeOnly 'mysql:mysql-connector-java'
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'

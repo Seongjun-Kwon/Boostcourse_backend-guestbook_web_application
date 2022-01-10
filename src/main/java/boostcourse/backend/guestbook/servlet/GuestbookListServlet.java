@@ -1,5 +1,6 @@
 package boostcourse.backend.guestbook.servlet;
 
+import boostcourse.backend.guestbook.DBConfig;
 import boostcourse.backend.guestbook.dao.GuestbookDao;
 import boostcourse.backend.guestbook.dto.Guestbook;
 
@@ -15,7 +16,9 @@ import java.util.List;
 @WebServlet("/guestbooks")
 public class GuestbookListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        GuestbookDao guestbookDao = new GuestbookDao();
+        DBConfig dbConfig = new DBConfig();
+        GuestbookDao guestbookDao = dbConfig.guestbookDao();
+
         List<Guestbook> list = guestbookDao.getGuestbooks();
 
         request.setAttribute("list", list);

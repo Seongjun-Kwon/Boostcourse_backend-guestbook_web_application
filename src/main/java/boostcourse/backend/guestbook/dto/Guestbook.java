@@ -8,6 +8,9 @@ public class Guestbook {
     private String content;
     private Date regdate;
 
+    public Guestbook() {
+    }
+
     public Guestbook(Long id, String name, String content, Date regdate) {
         this.id = id;
         this.name = name;

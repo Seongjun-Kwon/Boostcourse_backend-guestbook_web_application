@@ -1,58 +1,49 @@
 package boostcourse.backend.guestbook.dao;
 
 import boostcourse.backend.guestbook.dto.Guestbook;
-import boostcourse.backend.guestbook.util.DBUtil;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import javax.sql.DataSource;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Date;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static boostcourse.backend.guestbook.dao.GuestbookDaoSqls.*;
 
 public class GuestbookDao {
+    private NamedParameterJdbcTemplate jdbc;
+
+    public GuestbookDao(DataSource dataSource) {
+        this.jdbc = new NamedParameterJdbcTemplate(dataSource);
+    }
+
     public List<Guestbook> getGuestbooks() {
-        List<Guestbook> list = new ArrayList<>();
-
-        String sql = "SELECT id, name, content, regdate FROM guestbook";
-
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            try (ResultSet rs = ps.executeQuery()) {
-
-                while (rs.next()) {
-                    Long id = rs.getLong(1);
-                    String name = rs.getString(2);
-                    String content = rs.getString(3);
-                    Date regdate = rs.getDate(4);
-
-                    Guestbook guestbook = new Guestbook(id, name, content, regdate);
-
-                    list.add(guestbook);
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return list;
+        return jdbc.query(SELECT_ALL, new GuestbookMapper());
     }
 
     public void addGuestbook(Guestbook guestbook) {
-        String sql = "INSERT INTO guestbook (name, content, regdate) VALUES (?, ?, now())";
+        Map<String, Object> params = new HashMap<>();
 
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        params.put("name", guestbook.getName());
+        params.put("content", guestbook.getContent());
 
-            ps.setString(1, guestbook.getName());
-            ps.setString(2, guestbook.getContent());
+        jdbc.update(INSERT_ONE, params);
+    }
 
-            ps.executeUpdate();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+    private class GuestbookMapper implements RowMapper<Guestbook> {
+        @Override
+        public Guestbook mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Guestbook guestbook = new Guestbook();
+
+            guestbook.setId(rs.getLong(1));
+            guestbook.setName(rs.getString(2));
+            guestbook.setContent(rs.getString(3));
+            guestbook.setRegdate(rs.getDate(4));
+
+            return guestbook;
         }
     }
 }
