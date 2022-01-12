@@ -1,6 +1,7 @@
 package boostcourse.backend.guestbook;
 
 import boostcourse.backend.guestbook.dao.GuestbookDao;
+import boostcourse.backend.guestbook.dao.SpringJdbcGuestbookDao;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import javax.sql.DataSource;
@@ -12,7 +13,7 @@ public class DBConfig {
     private static String dbPassword = "connect123!@#";
 
     public GuestbookDao guestbookDao() {
-        return new GuestbookDao(dataSource());
+        return new SpringJdbcGuestbookDao(dataSource());
     }
 
     public DataSource dataSource() {
