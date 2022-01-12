@@ -1,6 +1,7 @@
 package boostcourse.backend.guestbook.dao;
 
 import boostcourse.backend.guestbook.dto.Guestbook;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,11 +11,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Repository
 public class JdbcGuestbookDao implements GuestbookDao {
     private static String dbUrl = "jdbc:mysql://localhost:3306/connectdb";
     private static String dbUser = "connectuser";
     private static String dbPassword = "connect123!@#";
 
+    @Override
     public List<Guestbook> getGuestbooks() {
         List<Guestbook> list = new ArrayList<>();
 
@@ -51,6 +54,7 @@ public class JdbcGuestbookDao implements GuestbookDao {
         return list;
     }
 
+    @Override
     public void addGuestbook(Guestbook guestbook) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");

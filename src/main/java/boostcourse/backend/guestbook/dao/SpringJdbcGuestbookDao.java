@@ -1,8 +1,10 @@
 package boostcourse.backend.guestbook.dao;
 
 import boostcourse.backend.guestbook.dto.Guestbook;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -13,6 +15,8 @@ import java.util.Map;
 
 import static boostcourse.backend.guestbook.dao.GuestbookDaoSqls.*;
 
+@Primary
+@Repository
 public class SpringJdbcGuestbookDao implements GuestbookDao {
     private final NamedParameterJdbcTemplate jdbc;
 
@@ -20,10 +24,12 @@ public class SpringJdbcGuestbookDao implements GuestbookDao {
         this.jdbc = new NamedParameterJdbcTemplate(dataSource);
     }
 
+    @Override
     public List<Guestbook> getGuestbooks() {
         return jdbc.query(SELECT_ALL, new GuestbookMapper());
     }
 
+    @Override
     public void addGuestbook(Guestbook guestbook) {
         Map<String, Object> params = new HashMap<>();
 
